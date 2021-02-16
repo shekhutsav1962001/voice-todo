@@ -87,10 +87,13 @@
       if (transcript.indexOf('new') == 0) {
         if (e.results[0].isFinal) {
           let todo = transcript.substring(3);
-          li = document.createElement('li');
+            if (todo != "") {
+               li = document.createElement('li');
           li.innerHTML = todo;
           todoList.appendChild(li);
           addClickEvent()
+            }
+         
         }
       }
 
