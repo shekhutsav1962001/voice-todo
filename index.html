@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Voice Todo</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f1f1f1;
+    }
+
+    ul {
+      background-color: #e1e1e1;
+      color: #0a192f;
+      font-weight: bolder;
+    }
+
+    li {
+      margin: 10px 0;
+      padding: 10px 0;
+      color: #0a192f;
+      font-family: sans-serif;
+      font-weight: bolder;
+      list-style-type: none;
+    }
+
+    .speak {
+      text-align: center;
+      margin: 20px;
+    }
+  </style>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
+</head>
+
+<body>
+  <div class="btn btn-primary speak" onclick="speak()">SPEAK</div>
+  <div style="text-align: center;">
+    <h2 class="h2">Say new and your todo and simple click on item for delete</h2>
+    <h4 class="h4">Ex. you say :- new car then it will add 'car' (always you have to speak prefix #new)</h4>
+  </div>
+  <ul style="text-align: center;" class="todos">
+
+  </ul>
+  <script>
+    function addClickEvent() {
+      $("li").on('click', function () {
+        $(this).fadeOut(300, function () {
+          $(this).fadeOut();
+        });
+      });
+    }
+
+
+    window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    const recognition = new SpeechRecognition();
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+
+
+    const todoList = document.querySelector('ul.todos');
+    console.log(todoList);
+
+
+    recognition.addEventListener('result', e => {
+      const transcript = Array.from(e.results)
+        .map(result => result[0])
+        .map(result => result.transcript)
+        .join('');
+      if (transcript.indexOf('new') == 0) {
+        if (e.results[0].isFinal) {
+          let todo = transcript.substring(3);
+          li = document.createElement('li');
+          li.innerHTML = todo;
+          todoList.appendChild(li);
+          addClickEvent()
+        }
+      }
+
+    });
+
+    // recognition.addEventListener('end', recognition.start);
+
+    function speak() {
+      recognition.start();
+    }
+  </script>
+
+
+</body>
+
+</html>
